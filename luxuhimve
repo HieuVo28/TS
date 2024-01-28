@@ -8,7 +8,7 @@ getgenv().Configs = {
 
     FastAttack = true,
     NewFastAttack = true,
-    NoAttackAnimation = true,
+    NoAttackAnimation = false,
     
     StartKaitun = true,
     -- World 1
@@ -71,7 +71,7 @@ getgenv().Configs = {
         
     SelectMainDF = {"Dragon-Dragon","Spirit-Spirit","Venom-Venom","Dough-Dough"}, -- ผลหลักที่จะกินเเทนผลรอง
     SelectSubDF = {"Ice-Ice","Sand-Sand","Dark-Dark","Quake-Quake","Light-Light"}, -- ผลรองจะกินไว้ก่อนเเล้วพอผลหลักมีก้จะเปลียนไปกินผิดหลัก
-    AllowEatDFInventory = true,
+    AllowEatDFInventory = false,
     StartSniper = true,
         
     -- RAM
@@ -88,9 +88,9 @@ getgenv().Configs = {
     
     -- CPU
     
-    LockFPS = 120,
+    LockFPS = 15,
     LockFPSNow = true,
-    WhiteScreen = false
+    WhiteScreen = true
 }
 _G.Key = "LuxuryV2_s97e05d7240njjzxl0js"
 _G.DiscordId = "591525604000792598"
