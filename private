@@ -42,7 +42,7 @@ else
         local jsonData = game:GetService("HttpService"):JSONEncode(playerData)  -- Convert Lua table to JSON
 
         local response = req({
-            Url = "http://" .. ip .. ":888/sendMessage",
+            Url = "http://" .. ip .. ":2024/sendMessage",
             Method = "POST",
             Headers = {
                 ["Content-Type"] = "application/json",
