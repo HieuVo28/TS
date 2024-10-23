@@ -155,6 +155,22 @@ else
         return a
     end
 
+    local function getDevilFruitMastery()
+        local Player = game.Players.LocalPlayer
+        local DevilFruit = Player:FindFirstChild("Data") and Player.Data:FindFirstChild("DevilFruit")
+        
+        if DevilFruit and DevilFruit.Value ~= "" then
+            local Backpack = Player:FindFirstChild("Backpack")
+            if Backpack then
+                local FruitTool = Backpack:FindFirstChild(DevilFruit.Value)
+                if FruitTool and FruitTool:FindFirstChild("Level") then
+                    return FruitTool.Level.Value
+                end
+            end
+        end
+        return 0
+    end
+
     local function k34()
         local v99 = {}
         local v100 = game.ReplicatedStorage.Remotes.CommF_:InvokeServer("getAwakenedAbilities")
@@ -194,6 +210,7 @@ else
         data["Beli"] = tostring(LocalPlayer.Data.Beli.Value):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
         data["Frag"] = tostring(LocalPlayer.Data.Fragments.Value):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
         data["Devil FRUIT"] = tostring(LocalPlayer.Data.DevilFruit.Value)
+		data["DFMastery"] = tostring(getDevilFruitMastery())
         data["Bounty/Honor"] = tostring(LocalPlayer.leaderstats["Bounty/Honor"].Value):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
         data["Race"] = k123()
         data["Melee(s)"] = j99()
