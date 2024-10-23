@@ -210,7 +210,7 @@ else
         data["Beli"] = tostring(LocalPlayer.Data.Beli.Value):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
         data["Frag"] = tostring(LocalPlayer.Data.Fragments.Value):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
         data["Devil FRUIT"] = tostring(LocalPlayer.Data.DevilFruit.Value)
-		data["DFMastery"] = tostring(getDevilFruitMastery())
+	data["DFMastery"] = tostring(getDevilFruitMastery())
         data["Bounty/Honor"] = tostring(LocalPlayer.leaderstats["Bounty/Honor"].Value):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
         data["Race"] = k123()
         data["Melee(s)"] = j99()
