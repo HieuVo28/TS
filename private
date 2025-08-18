@@ -21,7 +21,7 @@ else
 
     -- Client config (editable)
     local SERVER_NAME = "Awillsi"
-    local SERVER_PORT = 25775
+    local SERVER_PORT = 25755
     local BASE_URL = "http://" .. string.lower(SERVER_NAME) .. ".duckdns.org:" .. tostring(SERVER_PORT)
     local DEBUG_VERBOSE = true         -- in log chi tiết khi request
     local REQUEST_TIMEOUT = 10         -- giây (nếu executor hỗ trợ)
