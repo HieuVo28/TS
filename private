@@ -19,30 +19,17 @@ else
         print("[Debug]: " .. message)
     end
 
-
-
-    local function getIP()
-        local http = game:GetService("HttpService")
-        local req = (syn and syn.request) or request or (http and http.request) or http_request
-        local response = req({
-            Url = "https://hvauto.click/GetIP.php",
-            Method = "GET"
-        })
-    
-        local json = http:JSONDecode(response.Body)
-        return json.ip
-    end
-    
-
-    
+    -- Client config (editable)
+    local SERVER_NAME = "Awillsi"
+    local SERVER_PORT = 25775
+    local BASE_URL = "http://" .. string.lower(SERVER_NAME) .. ".duckdns.org:" .. tostring(SERVER_PORT)
 
     local function sendMessageToServer(playerData)
-        local ip = getIP()
         local http = game:GetService("HttpService")
         local jsonData = game:GetService("HttpService"):JSONEncode(playerData)  -- Convert Lua table to JSON
 
         local response = req({
-            Url = "http://" .. ip .. ":2024/sendMessage",
+            Url = BASE_URL .. "/sendMessage",
             Method = "POST",
             Headers = {
                 ["Content-Type"] = "application/json",
