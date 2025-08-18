@@ -78,7 +78,7 @@ else
         local http = game:GetService("HttpService")
         local jsonData = http:JSONEncode(playerData)  -- Convert Lua table to JSON
 
-        local url = BASE_URL .. "/sendMessage"
+        local url = BASE_URL .. "/api/sendMessage"
         local ok, response = requestWithDebug({
             Url = url,
             Method = "POST",
