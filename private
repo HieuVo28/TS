@@ -23,26 +23,77 @@ else
     local SERVER_NAME = "Awillsi"
     local SERVER_PORT = 25775
     local BASE_URL = "http://" .. string.lower(SERVER_NAME) .. ".duckdns.org:" .. tostring(SERVER_PORT)
+    local DEBUG_VERBOSE = true         -- in log chi tiết khi request
+    local REQUEST_TIMEOUT = 10         -- giây (nếu executor hỗ trợ)
+
+    local function trimBody(body)
+        if not body then return "(nil)" end
+        if #body > 500 then
+            return string.sub(body, 1, 500) .. "... (truncated)"
+        end
+        return body
+    end
+
+    local function requestWithDebug(opts, label)
+        label = label or "request"
+        opts = opts or {}
+        opts.Method = opts.Method or "GET"
+        opts.Url = opts.Url or BASE_URL
+        opts.Headers = opts.Headers or {}
+        opts.Timeout = opts.Timeout or REQUEST_TIMEOUT
+
+        local started = tick()
+        if DEBUG_VERBOSE then
+            debugLog(string.format("[%s] -> %s %s", label, tostring(opts.Method), tostring(opts.Url)))
+        end
+
+        local ok, res = pcall(req, opts)
+        local duration = tick() - started
+
+        if not ok then
+            debugLog(string.format("[%s] ERROR: %s (%.2fs)", label, tostring(res), duration))
+            debugLog(string.format("[%s] Server: %s, Port: %s", label, string.lower(SERVER_NAME)..".duckdns.org", tostring(SERVER_PORT)))
+            return false, nil, duration
+        end
+
+        if DEBUG_VERBOSE then
+            debugLog(string.format("[%s] Status: %s (%.2fs)", label, tostring(res.StatusCode), duration))
+            if res.Headers then
+                debugLog(string.format("[%s] Resp-Headers: %s", label, http:JSONEncode(res.Headers)))
+            end
+            if res.Body then
+                debugLog(string.format("[%s] Resp-Body: %s", label, trimBody(res.Body)))
+            end
+        end
+
+        -- Đánh dấu timeout theo cảm quan nếu thời gian quá dài
+        if duration >= REQUEST_TIMEOUT then
+            debugLog(string.format("[%s] Suspected TIMEOUT (>=%ds)", label, REQUEST_TIMEOUT))
+        end
+
+        return true, res, duration
+    end
 
     local function sendMessageToServer(playerData)
         local http = game:GetService("HttpService")
-        local jsonData = game:GetService("HttpService"):JSONEncode(playerData)  -- Convert Lua table to JSON
+        local jsonData = http:JSONEncode(playerData)  -- Convert Lua table to JSON
 
-        local response = req({
-            Url = BASE_URL .. "/sendMessage",
+        local url = BASE_URL .. "/sendMessage"
+        local ok, response = requestWithDebug({
+            Url = url,
             Method = "POST",
-            Headers = {
-                ["Content-Type"] = "application/json",
-            },
-            Body = jsonData
-        })
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = jsonData,
+            Timeout = REQUEST_TIMEOUT
+        }, "sendMessage")
 
-        debugLog("Server Response Status: " .. response.StatusCode)
-        if response.StatusCode ~= 200 then 
-            debugLog("Failed to send the message. Server responded with: " .. response.Body)
-            return false 
+        if not ok then
+            return false
         end
-
+        if not response or response.StatusCode ~= 200 then
+            debugLog(string.format("[sendMessage] FAILED: %s %s -> %s", "POST", url, tostring(response and response.StatusCode)))
+            return false
+        end
         debugLog("Message sent successfully!")
         return response.Body
     end
