@@ -110,6 +110,20 @@ else
         return k98
     end
 
+    function checkSanguineArt()
+        local status = game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BuySanguineArt", true)
+        if status == 1 then
+            return true, "Can buy."
+        elseif status == 2 then
+            return false, "Already owned."
+        elseif status == 3 then
+            return false, "Too weak."
+        elseif status == 0 then
+            return false, "Not enough funds."
+        end
+        return false, "Unknown status: " .. tostring(status)
+    end
+
     function CheckTrainSS()
         local InvokeServer_ret1_9, InvokeServer_ret2_9 = game.ReplicatedStorage.Remotes.CommF_:InvokeServer("UpgradeRace", "Check");
         if InvokeServer_ret1_9 == 8 then
@@ -257,6 +271,8 @@ else
         data["Awakened Skills"] = k34()
         data["Accessory(s)"] = v908("Wear")
         data["Fruit(s)"] = v908("Blox Fruit")
+        local _, spyMsg = checkSanguineArt()
+        data["Spy"] = spyMsg
         data["Materials(s)"] = v999()
         data["TrainSS"] = CheckTrainSS()
         data["PullLever"] = CheckPullLever()
