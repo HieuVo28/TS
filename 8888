@@ -20,7 +20,7 @@ else
     end
 
     -- Client config (editable)
-    local SERVER_NAME = "vietai"
+    local SERVER_NAME = "Awillsi"
     local SERVER_PORT = 25755
     local BASE_URL = "http://" .. string.lower(SERVER_NAME) .. ".duckdns.org:" .. tostring(SERVER_PORT)
     local DEBUG_VERBOSE = true         -- in log chi tiết khi request
@@ -108,6 +108,20 @@ else
         end
 
         return k98
+    end
+
+    function checkSanguineArt()
+        local status = game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BuySanguineArt", true)
+        if status == 1 then
+            return true, "Can buy."
+        elseif status == 2 then
+            return false, "Already owned."
+        elseif status == 3 then
+            return false, "Too weak."
+        elseif status == 0 then
+            return false, "Not enough funds."
+        end
+        return false, "Unknown status: " .. tostring(status)
     end
 
     function CheckTrainSS()
@@ -257,6 +271,8 @@ else
         data["Awakened Skills"] = k34()
         data["Accessory(s)"] = v908("Wear")
         data["Fruit(s)"] = v908("Blox Fruit")
+        local _, spyMsg = checkSanguineArt()
+        data["Spy"] = spyMsg
         data["Materials(s)"] = v999()
         data["TrainSS"] = CheckTrainSS()
         data["PullLever"] = CheckPullLever()
